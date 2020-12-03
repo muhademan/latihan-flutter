@@ -1,7 +1,6 @@
 import 'package:aplikasigojek/constant.dart';
 import 'package:aplikasigojek/launcher/launcher_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 void main() => runApp(new MyApp());
 
@@ -35,4 +34,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
