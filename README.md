@@ -1,5 +1,7 @@
 # aplikasigojek
 
+belajar dari : https://medium.com/@riz_maulana/membangun-landing-page-aplikasi-go-jek-dengan-flutter-sdk-bagian-1-3-531d0cd537db
+
 A new Flutter project.
 
 ## Getting Started
