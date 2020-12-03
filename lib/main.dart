@@ -1,17 +1,21 @@
+import 'package:aplikasigojek/constant.dart';
 import 'package:aplikasigojek/launcher/launcher_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-void main() {
-  runApp(MyApp());
-}
+void main() => runApp(new MyApp());
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return new MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'GOJEK',
-      theme: ThemeData(
+      theme: new ThemeData(
+        fontFamily: 'NeoSans',
+        primaryColor: GojekPalette.green,
+        accentColor: GojekPalette.green,
         // This is the theme of your application.
         //
         // Try running your application with "flutter run". You'll see the
@@ -21,11 +25,11 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
-        primarySwatch: Colors.blue,
+        // primarySwatch: Colors.blue,
         // This makes the visual density adapt to the platform that you run
         // the app on. For desktop platforms, the controls will be smaller and
         // closer together (more dense) than on mobile platforms.
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+        // visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: new LauncherPage(),
     );

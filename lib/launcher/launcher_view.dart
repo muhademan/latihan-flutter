@@ -18,7 +18,7 @@ class _LauncherPageState extends State<LauncherPage> {
     var duration = const Duration(seconds: 1);
     return new Timer(duration, (){
       //kalau push ada tombol back untuk halaman sedang pushReplacement tidak ada tombol back
-      Navigator.of(context).push(new MaterialPageRoute(builder: (_)
+      Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (_)
       {
       return new LandingPage();
     }));
