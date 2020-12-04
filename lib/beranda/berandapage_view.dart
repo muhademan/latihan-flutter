@@ -1,3 +1,5 @@
+
+
 import 'package:aplikasigojek/beranda/beranda_gojek_appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,26 +11,32 @@ class BerandaPage extends StatefulWidget {
   _BerandaPageState createState() => new _BerandaPageState();
 }
 
-List<GojekService> _gojekServiceList = [];
+
 List<Food> _goFoodFeaturedList = [];
+Future<List<Food>> fetchFood() async {
+  _goFoodFeaturedList.add(
+      new Food(title: "Steak Andakar", image: "assets/images/food_1.jpg"));
+  _goFoodFeaturedList.add(
+      new Food(title: "Mie Ayam Tumini", image: "assets/images/food_2.jpg"));
+  _goFoodFeaturedList.add(
+      new Food(title: "Tengkleng Hohah", image: "assets/images/food_3.jpg"));
+  _goFoodFeaturedList.add(
+      new Food(title: "Warung Steak", image: "assets/images/food_4.jpg"));
+  _goFoodFeaturedList.add(new Food(
+      title: "Kindai Warung Banjar", image: "assets/images/food_5.jpg"));
+
+  return new Future.delayed(new Duration(seconds: 1), () {
+    return _goFoodFeaturedList;
+  });
+}
+
+List<GojekService> _gojekServiceList = [];
 class _BerandaPageState extends State<BerandaPage> {
   //Kembali ke beranda_view.dart buat sebuah list dengan tipe data GojekService beranama _gojekServiceList pada class _BerandaPageState,
   // kemudian overide initState dan isikan list _gojekServiceList sesuai dengan menu yang akan ditampilkan.
   @override
   void initState() {
     super.initState();
-    /*Dibawah inisiasi Gojek Services*/
-    _goFoodFeaturedList.add(
-        new Food(title: "Steak Andakar", image: "assets/images/food_1.jpg"));
-    _goFoodFeaturedList.add(
-        new Food(title: "Mie Ayam Tumini", image: "assets/images/food_2.jpg"));
-    _goFoodFeaturedList.add(
-        new Food(title: "Tengkleng Hohah", image: "assets/images/food_3.jpg"));
-    _goFoodFeaturedList.add(
-        new Food(title: "Warung Steak", image: "assets/images/food_4.jpg"));
-    _goFoodFeaturedList.add(new Food(
-        title: "Kindai Warung Banjar", image: "assets/images/food_5.jpg"));
-
     _gojekServiceList.add(new GojekService(
         image: Icons.directions_bike,
         color: GojekPalette.menuRide,
@@ -247,29 +255,39 @@ Widget _buildGojekServicesMenu() {
 // Buat method _rowGojekService(GojekService gojekService) dengan paramater GojekService sehingga masing-masing item grid mempunyai icon
 // dan text yang berbeda sesuai dengan model yang sudah kita inisiasi pada method initState.
 Widget _rowGojekService(GojekService gojekService) {
-
   return new Container(
-      child: new Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-       new Container(
-      decoration: new BoxDecoration(
-      border: Border.all(color: GojekPalette.grey200, width: 1.0),
-      borderRadius:
-      new BorderRadius.all(new Radius.circular(20.0))),
-  padding: EdgeInsets.all(12.0),
-  child: new Icon(
-  gojekService.image,
-  color: gojekService.color,
-  size: 32.0,
-  ),
-  ),
-  new Padding(
-  padding: EdgeInsets.only(top: 6.0),
-  ),
-  new Text(gojekService.title, style: new TextStyle(fontSize: 10.0))
-  ],
-  ),
+    child: new Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        new GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            var context;
+            showModalBottomSheet<void>(
+                context: context,
+                builder: (context) {
+                  return _buildMenuBottomSheet();
+                });
+          },
+          child: new Container(
+            decoration: new BoxDecoration(
+                border: Border.all(color: GojekPalette.grey200, width: 1.0),
+                borderRadius:
+                new BorderRadius.all(new Radius.circular(20.0))),
+            padding: EdgeInsets.all(12.0),
+            child: new Icon(
+              gojekService.image,
+              color: gojekService.color,
+              size: 32.0,
+            ),
+          ),
+        ),
+        new Padding(
+          padding: EdgeInsets.only(top: 6.0),
+        ),
+        new Text(gojekService.title, style: new TextStyle(fontSize: 10.0))
+      ],
+    ),
   );
 }
 
@@ -279,29 +297,41 @@ Widget _buildGoFoodFeatured() {
     child: new Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-    new Text(
-    "GO-FOOD",
-      style: new TextStyle(fontFamily: "NeoSansBold"),
-    ),
-    new Padding(
-      padding: EdgeInsets.only(top: 8.0),
-    ),
-    new Text(
-      "Pilihan Terlaris",
-      style: new TextStyle(fontFamily: "NeoSansBold"),
-    ),
-    new SizedBox(
-      height: 172.0,
-      child: new ListView.builder(
-        itemCount: _goFoodFeaturedList.length,
-        padding: EdgeInsets.only(top: 12.0),
-        physics: new ClampingScrollPhysics(),
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) {
-          return _rowGoFoodFeatured(_goFoodFeaturedList[index]);
-        },
-      ),
-    ),
+        new Text(
+          "GO-FOOD",
+          style: new TextStyle(fontFamily: "NeoSansBold"),
+        ),
+        new Padding(
+          padding: EdgeInsets.only(top: 8.0),
+        ),
+        new Text(
+          "Pilihan Terlaris",
+          style: new TextStyle(fontFamily: "NeoSansBold"),
+        ),
+        new SizedBox(
+          height: 172.0,
+          child: FutureBuilder<List>(
+              future: fetchFood(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return new ListView.builder(
+                    itemCount: snapshot.data.length,
+                    padding: EdgeInsets.only(top: 12.0),
+                    physics: new ClampingScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      return _rowGoFoodFeatured(snapshot.data[index]);
+                    },
+                  );
+                }
+                return Center(
+                  child: SizedBox(
+                      width: 40.0,
+                      height: 40.0,
+                      child: const CircularProgressIndicator()),
+                );
+              }),
+        ),
       ],
     ),
   );
@@ -329,5 +359,53 @@ Widget _rowGoFoodFeatured(Food food) {
       ],
     ),
   );
+}
+
+//method tersebut berfungsi untuk menampilkan bottom sheet yang akan dipanggil ketika pengguna melakukan tap pada salah satu menu Gojek Service.
+Widget _buildMenuBottomSheet() {
+  return new StatefulBuilder(builder: (c, s) {
+    return new SafeArea(
+        child: new Container(
+          padding: EdgeInsets.only(left: 16.0, right: 16.0),
+          width: double.infinity,
+          decoration: new BoxDecoration(
+              borderRadius: BorderRadius.circular(4.0), color: Colors.white),
+          child: new Column(children: <Widget>[
+            new Icon(
+              Icons.drag_handle,
+              color: GojekPalette.grey,
+            ),
+            new Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                new Text(
+                  "GO-JEK Services",
+                  style: new TextStyle(fontFamily: "NeoSansBold", fontSize: 18.0),
+                ),
+                new OutlineButton(
+                  color: GojekPalette.green,
+                  onPressed: () {},
+                  child: new Text(
+                    "EDIT FAVORITES",
+                    style:
+                    new TextStyle(fontSize: 12.0, color: GojekPalette.green),
+                  ),
+                ),
+              ],
+            ),
+            new Container(
+              height: 300.0,
+              child: new GridView.builder(
+                  physics: new NeverScrollableScrollPhysics(),
+                  itemCount: _gojekServiceList.length,
+                  gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 4),
+                  itemBuilder: (context, position) {
+                    return _rowGojekService(_gojekServiceList[position]);
+                  }),
+            ),
+          ]),
+        ));
+  });
 }
 
